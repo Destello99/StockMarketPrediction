@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<!--CHART-->
+{% if stock_detail %}
+
+<div id="chartContainer" style="height: 700px; width: 100%;" class="mb-3"></div>
+  </hr>
+  <hr>
+
+            {% if symbol %}
+                 <div class="text-center p-3 m-4">
+                        <h3>
+                            <label id = "symbol">{{symbol}}</label>
+                            
+                            STOCK DETAIL
+                          {% if user.is_authenticated %}
+                            <a href="{% url 'save_watch_list' user.id symbol %}" class="btn btn-primary">Add to watchlist</a>
+                          {% endif %}
+                        </h3>
+                 </div>
+
+               
+                  <table id="myTable1" class="table table-bordered
+                  mt-3">
+                  {% for i,j in stock_detail.items %}
+                  <tr>
+                    <th>{{i}} </th>
+                    <td>{{j}}</td>
+                    
+                  </tr>
+                  {% endfor %}
+                </table>
+            {% endif %}
+
+
+
+
+
+
+
+
+ 
+{% else %}
+    {% for i in messages %}
+    <p class="alert alert-danger mt-5 text-center">{{i}}</p>
+    {% endfor %}
+{% endif  %}
+
+{% endblock %}
+
+  <!--SCRIPTS-->
+

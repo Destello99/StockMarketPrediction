@@ -1,0 +1,81 @@
+
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+    <div class="container">
+        <div class="text-center mt-4">
+            <p class="alert alert-warning">PROFILE INFO</p>
+        </div>
+        {% for i in messages %}
+        <p class="alert alert-success">{{i}}</p>
+        {% endfor %}
+        <div class="row mt-5">
+            <form method="POST" action="{% url 'update_profile' user.id %}">
+                {% csrf_token %}
+            <table class="table table-responsive">
+                <tr>
+                        <td> First Name  </td>
+                        <td> 
+                            <input type="text" value="{{user.first_name}}" name="fname" class="form-control">
+                              </td>
+                </tr>
+                <tr>
+                    <td> last Name  </td>
+                    <td> 
+                        <input type="text" value="{{user.last_name}}" name="lname"  class="form-control">
+                        
+                    
+                    </td>
+                </tr>
+
+                <tr>
+                    <td> Email  </td>
+                    <td> 
+                        <input type="text" disabled value="{{user.email}}" class="form-control">
+                         </td>
+                </tr>
+
+                <tr>
+                    <td> Username  </td>
+                    <td> 
+                        <input type="text" disabled value="{{user.username}}" class="form-control">
+                         </td>
+                </tr>
+
+                <tr>
+                    <td> Mobile  </td>
+                    <td> 
+                        <input type="text" name="mobile"  value='{{user.userprofile.mobile_number | default:""}}' class="form-control">
+                          </td>
+                </tr>
+
+                <tr>
+                    <td> Address  </td>
+                    <td> 
+                        <input type="text" name="address"  value='{{user.userprofile.address | default:""}}' class="form-control">
+                          </td>
+                </tr>
+
+               
+
+
+            </table>
+
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-primary btn-lg">UPDATE PROFILE</button>
+            </div>
+        </form>
+        </div>
+
+    </div>
+
+
+    
+
+
+
+
+
+{% endblock %}

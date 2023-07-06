@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+
+<!--CHART-->
+
+<div id="chartContainer" style="height: 700px; width: 100%;" class="mb-3"></div>
+  </hr>
+  <hr>
+
+<!--end CHART-->
+
+
+    
+        <!--
+                <table class="table table-responsive
+                 mt-3" style="margin-left:20px;margin-right:20px;">
+                  <tr>
+                    <th>Symbol </th>
+                    <th>Company Name</th>
+                    <th>Price change</th>
+                    <th>Previous Close</th>
+                    <th>Day high</th>
+                    <th>Day Low</th>
+                    <th>Main Price </th>
+                  </tr>
+                  {% for i in stocks %}
+                  <tr>
+                    <td>{{i.symbol}} </td>
+                    <td>{{i.companyName}}</td>
+                    {% if i.pChange > 0 %}
+                    <td class="text-success">{{i.pChange}} % </td>
+                    {% else %}
+                    <td class="text-danger">{{i.pChange}} % </td>
+                    {% endif %}
+                    <td>{{i.previousClose}}</td>
+                    <td class="text-success">{{i.dayHigh}}</td>
+                    <td class="text-danger">{{i.dayLow}}</td>
+
+                    {% if i.lastPrice < i.previousClose %}
+                    <td class="text-danger">{{i.lastPrice}}</td>
+                    {% else %}
+                    <td class="text-success">{{i.lastPrice}}</td>
+                    {% endif %}
+                  </tr>
+                  {% endfor %}
+                </table>
+
+                <br><br></hr>
+  -->
+                 <!-- <p id="myPara">This is a paragraph.</p> -->
+               
+                  <table id="myTable" class="table table-responsive
+                  mt-3" style="margin-left:20px;margin-right:20px;">
+                  <tr>
+                    <th>Symbol </th>
+                    <th>Company Name</th>
+                    <th>Price change</th>
+                    <th>Previous Close</th>
+                    <th>Day high</th>
+                    <th>Day Low</th>
+                    <th>Main Price </th>
+                    <th>Action</th>
+                  </tr>
+
+                </table>
+            
+
+
+
+
+
+
+        <script>
+
+
+/*
+INDEX PAGE CHART  GET DATA FROM API
+
+*/
+
+
+
+
+
+window.onload = function () {
+  var dps1 = [], dps2= [];
+  var stockChart = new CanvasJS.StockChart("chartContainer",{
+    theme: "light2",
+    exportEnabled: true,
+    title:{
+      text:"IBM CHART with Date-Time Axis"
+    },
+    subtitles: [{
+      text: "IBM PRICE IN RUPEES"
+    }],
+    charts: [{
+      axisX: {
+        crosshair: {
+          enabled: true,
+          snapToDataPoint: true
+        }
+      },
+      axisY: {
+        prefix: "₹"
+      },
+      data: [{
+        type: "candlestick",
+        yValueFormatString: "#,###.##",
+        dataPoints : dps1
+      }]
+    }],
+    navigator: {
+      data: [{
+        dataPoints: dps2
+      }],
+      slider: {
+        minimum: new Date(2019, 12, 22),
+        maximum: new Date(2021, 12, 24)
+      }
+    }
+  });
+  $.getJSON(baseUrl+"/api/get_stock_by_symbol?symbol=IBM", function(data) {
+    x = Object.entries(data);
+    mainData = Object.entries(x[1][1])
+
+    for(var i = 0; i < mainData.length; i++){
+
+      open = mainData[i][1]["Open"]
+      high = mainData[i][1]["High"]
+      low = mainData[i][1]["Low"]
+      close = mainData[i][1]["Close"]
+
+
+      dps1.push({x: new Date(mainData[i][0]), y: [Number(open), Number(high), Number(low), Number(close)]});
+      dps2.push({x: new Date(mainData[i][0]), y: Number(close)});
+    }
+    stockChart.render();
+  });
+}
+
+
+
+/*
+END INDEX PAGE CHART  GET DATA FROM API
+*/
+
+
+        </script>
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

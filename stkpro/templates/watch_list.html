@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<div class="mt-4">
+    <p class="alert alert-warning text-center">MY WATCHLIST</p>
+</div>
+
+<div class="row">
+  {% for i in messages %}
+  <p class="alert alert-danger">{{i}}</p>
+  {% endfor %}
+</div>
+
+
+<table id="myTable4" class="table table-responsive
+mt-3" style="margin-left:20px;margin-right:20px;">
+
+<tr>
+  <th>Symbol </th>
+  <th>Company Name</th>
+  <th>Price change</th>
+  <th>Previous Close</th>
+  <th>Day high</th>
+  <th>Day Low</th>
+  <th>Main Price </th>
+  <th>Action</th>
+</tr>
+
+</table>
+
+
+<br>
+<p hidden id = "stock_symbol_array">{{stock_symbol}}</p>
+
+
+
+
+<!--SCRIPTS EXTRA-->
+  
+<script>
+
+
+  
+  async function getWatchList(url){
+    const response = await fetch(url);
+    var data = await response.json();
+    data = data['payload']
+
+    arr = document.getElementById("stock_symbol_array").innerHTML
+    var table = document.getElementById("myTable4");
+
+    try{
+      for(let i=0;i < arr.length;i++){
+      table.deleteRow(-1);
+      }
+    }
+    catch(err){
+      console.log(err.message)
+    }
+
+    var row = table.insertRow(-1);
+        row.style.fontWeight="900";
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
+        var cell5 = row.insertCell(4);
+        var cell6 = row.insertCell(5);
+        var cell7 = row.insertCell(6);
+        var cell8 = row.insertCell(7);
+        cell1.innerHTML = "Symbol";
+        cell2.innerHTML = "Company name";
+        cell3.innerHTML = "Price Change";
+        cell4.innerHTML = "previous Close";
+        cell5.innerHTML = "Day High";
+        cell6.innerHTML = "Day Low";
+        cell7.innerHTML = "Main Price";
+        cell8.innerHTML = "Action";
+
+    for(let i=0;i<arr.length;i++){
+
+      if (arr.includes(data[i]['symbol'])){
+        var table = document.getElementById("myTable4");
+        var row = table.insertRow(-1);
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
+        var cell5 = row.insertCell(4);
+        var cell6 = row.insertCell(5);
+        var cell7 = row.insertCell(6);
+        var cell8 = row.insertCell(7)
+        cell1.innerHTML = data[i]['symbol'];
+        cell2.innerHTML = data[i]['name'];
+        if (data[i]['change'] > 0){
+          cell3.style.color = 'green';
+        }
+        else{
+          cell3.style.color = 'red';
+        }
+        cell3.innerHTML = data[i]['change'] + " %";
+        cell4.innerHTML = data[i]['previousClose'];
+        cell5.innerHTML = data[i]['dayHigh'];
+        cell5.style.color = 'green'
+        cell6.innerHTML = data[i]['dayLow'];
+        cell6.style.color = 'red';
+        cell7.innerHTML = data[i]['lastPrice'];
+        if(cell7.innerHTML < cell4.innerHTML){
+          cell7.style.color = "red";
+        }
+        else{
+          cell7.style.color = 'green';
+        }
+        stock_detail_path = '/stock/'+ data[i]['symbol'];
+        cell8.innerHTML =  '<a class="btn btn-primary" href="' + stock_detail_path + '">VIEW DEATIL</a>';
+
+        
+      }       //if end
+    }   //loop end
+
+  }   //function end
+
+
+
+
+    
+  setInterval(function() {
+
+    //arr = document.getElementById("stock_symbol_array").innerHTML
+    url = "http://127.0.0.1:8000/api/get_stock_list"
+    getWatchList(url);
+  
+
+  
+  }, 1000);
+
+
+
+
+
+</script>
+  
+
+
+
+
+
+
+
+{% endblock %}

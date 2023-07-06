@@ -1,0 +1,219 @@
+<html>
+  {% load static %}
+  <head>
+    <!-- Font Awesome -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+      rel="stylesheet"
+    />
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- MDB -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.1/mdb.min.css"
+      rel="stylesheet"
+    />
+    <!-- MDB -->
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.1/mdb.min.js"
+    ></script>
+
+    <script>
+      const baseUrl = '//{{ request.get_host }}';
+    </script>
+
+    <script type="text/javascript" src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.stock.min.js"></script>
+
+    <script type="text/javascript" src="{% static 'script.js' %}"></script>
+
+
+  </head>
+  <body>
+    <div class="bg-dark text-white p-1">
+        <marquee>
+
+
+
+        
+        <span id="top_marquee">
+    <!--
+            {% for i in stock %}
+                {{i.companyName}} : 
+                {% if i.previousClose < i.lastPrice %}
+                    <span class="text-success">{{i.lastPrice}}</span>
+                    <span class="fas fa-caret-up text-success" style="margin-right:20px"></span>
+                {% else %}
+                    <span class="text-danger">{{i.lastPrice}}</span>
+                    <span class="fas fa-caret-down text-danger" style="margin-right:20px"></span>
+                {% endif %}
+                {% endfor %}
+    -->
+        </span>
+
+
+
+        <p>
+            
+            <p>
+        </marquee>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <!-- Container wrapper -->
+      <div class="container-fluid">
+        <!-- Toggle button -->
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-mdb-toggle="collapse"
+          data-mdb-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- Collapsible wrapper -->
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <!-- Navbar brand -->
+          <a class="navbar-brand mt-2 mt-lg-0" href="{% url 'index' %}">
+            TPW
+          </a>
+          <!-- Left links -->
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'index' %}">Dashboard</a>
+            </li>
+
+            {% if user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'user_profile' user.username %}">My Profile</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'watch_list' user.id %}">WatchList</a>
+            </li>
+            {% endif %}
+
+          </ul>
+          <!-- Left links -->
+        </div>
+        <!-- Collapsible wrapper -->
+
+        <!-- Right elements -->
+        <div class="d-flex align-items-center">
+
+            <!--SEARCH BUTTON-->
+          <form class="d-flex input-group w-auto" method = "GET" action="{% url 'search_stock' %}">
+            <input
+              type="search"
+              class="form-control rounded"
+              placeholder="Search US Strocks "
+              aria-label="Search"
+              aria-describedby="search-addon"
+              name = 'symbol'
+            />
+            <button type="submit" class="input-group-text border-0" id="search-addon">
+              <i class="fas fa-search"></i>
+            </button>
+          </form>
+
+          <!--END SEARCH BUTTON-->
+
+
+
+
+
+          {% if user.is_authenticated %}
+
+         
+
+        
+          <!-- Avatar -->
+          <a
+            class="dropdown-toggle d-flex align-items-center hidden-arrow"
+            href="#"
+            id="navbarDropdownMenuLink"
+            role="button"
+            data-mdb-toggle="dropdown"
+            aria-expanded="false"
+          >
+
+          
+          <a href="{% url 'predict' %}" class="btn btn-primary">Prediction</a>
+         
+         
+          {% if user.userprofile.photo %}
+            <img
+              src="/media/{{user.userprofile.photo}}"
+              class="rounded-circle"
+              height="25"
+              alt="Black and White Portrait of a Man"
+              loading="lazy"
+            />
+
+            {% else %}
+            <img
+              src="{% static 'images/download.png' %}"
+              class="rounded-circle"
+              height="25"
+              alt="Black and White Portrait of a Man"
+              loading="lazy"
+            />
+            {% endif %}
+          </a>
+          <ul
+            class="dropdown-menu dropdown-menu-end"
+            aria-labelledby="navbarDropdownMenuLink"
+          >
+            <li>
+              <a class="dropdown-item" href="{% url 'user_profile' user.username %}">My profile</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="{% url 'change_password' %}">Change Password</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+            </li>
+          </ul>
+          {% else %}
+            <a href="{% url 'login' %}" class="btn btn-primary">Prediction</a>
+
+          {% endif %}
+
+
+        </div>
+        <!-- Right elements -->
+      </div>
+      <!-- Container wrapper -->
+    </nav>
+    <!-- Navbar -->
+
+
+{% block content %}
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+ 
+
+
+</body>
+
+
+
+</html>
+
